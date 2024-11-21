@@ -13,6 +13,15 @@ const login = asyncHandler(async (req, res, next) => {
   }
 });
 
+const googleAuth = asyncHandler(async (req, res, next) => {
+  const { error } = await Validator.googleAuth.validateAsync(req.body); //validate request
+  if (error) {
+    next(new ErrorResponse(error.message, 400));
+  } else {
+    await AuthStore.googleAuth(req, res, next);
+  }
+});
+
 const register = asyncHandler(async (req, res, next) => {
   const { error } = await Validator.register.validateAsync(req.body); //validate request
   if (error) {
@@ -25,4 +34,5 @@ const register = asyncHandler(async (req, res, next) => {
 module.exports = {
   register,
   login,
+  googleAuth,
 };

@@ -40,9 +40,14 @@ const resetPassword = Joi.object({
   password: Joi.string().trim().min(5).max(50).required(),
 });
 
+const googleAuth = Joi.object({
+  id_token: Joi.string().required(),
+});
+
 module.exports = {
   createUser,
   forgotPassword,
   register,
   resetPassword,
+  googleAuth,
 };
