@@ -8,7 +8,14 @@ const getPlans = asyncHandler(async (req, res, next) => {
 });
 
 const makePayment = asyncHandler(async (req, res, next) => {
-  await SubStore.makePayment(req, res, next);
+  const { error } = await Validator.makeSubscriptionPayment.validateAsync(
+    req.body
+  ); //validate request
+  if (error) {
+    next(new ErrorResponse(error.message, 400));
+  } else {
+    await SubStore.makePayment(req, res, next);
+  }
 });
 
 const getSubscriptions = asyncHandler(async (req, res, next) => {
