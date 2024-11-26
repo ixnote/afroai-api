@@ -44,10 +44,15 @@ const googleAuth = Joi.object({
   id_token: Joi.string().required(),
 });
 
+const makeSubscriptionPayment = Joi.object({
+  plan_id: Joi.number().required(),
+});
+
 module.exports = {
   createUser,
   forgotPassword,
   register,
   resetPassword,
   googleAuth,
+  makeSubscriptionPayment,
 };

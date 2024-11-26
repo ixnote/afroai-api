@@ -147,14 +147,7 @@ const helpers = {
   pageCount,
   referenceGenerator,
   paystackReferenceGenerator,
-  transactionTypes,
-  transactionGenus,
-  transactionStatus,
-  baxiErrors,
-  notificationType,
   search,
-  dispatchType,
-  notificationTypes,
 };
 
 module.exports = helpers;

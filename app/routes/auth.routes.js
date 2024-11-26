@@ -5,7 +5,6 @@ const verify = require("../middleware/verify");
 const { authorize } = require("../middleware/authJwt");
 
 router
-  .post("/login", authCtrl.login)
   .post("/google", authCtrl.googleAuth)
   .post(
     "/register",

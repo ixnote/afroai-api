@@ -1,21 +1,17 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class User extends Model {
+  class SubscriptionHistory extends Model {
     /**
      * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
+     * This method is not a part of DataTypes lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {}
 
-    static get defaultScope() {
-      return {
-        attributes: { exclude: ["password"] },
-      };
-    }
+    static get defaultScope() {}
   }
-  User.init(
+  SubscriptionHistory.init(
     {
       id: {
         allowNull: false,
@@ -23,16 +19,17 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
-      email: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
+      user_id: {
+        type: DataTypes.INTEGER,
       },
-      password: {
-        type: DataTypes.STRING,
+      tokens_allocated: {
+        type: DataTypes.INTEGER,
       },
-      token: {
-        type: DataTypes.STRING,
+      payment_reference: {
+        type: DataTypes.INTEGER,
+      },
+      transaction_id: {
+        type: DataTypes.INTEGER,
       },
       created_at: {
         type: Date,
@@ -43,8 +40,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "User",
+      modelName: "SubscriptionHistory",
     }
   );
-  return User;
+  return SubscriptionHistory;
 };
