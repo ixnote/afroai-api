@@ -7,6 +7,7 @@ const asyncHandler = require("../middleware/async");
 const googleAuth = asyncHandler(async (req, res, next) => {
   const { error } = await Validator.googleAuth.validateAsync(req.body); //validate request
   if (error) {
+    console.log("🚀 ~ googleAuth ~ error:", error);
     next(new ErrorResponse(error.message, 400));
   } else {
     await AuthStore.googleAuth(req, res, next);

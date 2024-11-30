@@ -76,11 +76,20 @@ const googleAuth = asyncHandler(async (req, res, next) => {
     delete user.password;
 
     // Return the JWT
-    res.json({
+    // res.json({
+    //   success: true,
+    //   message: "Google authentication successful",
+    //   jwt: jwtToken,
+    //   user: user,
+    // });
+
+    return res.status(200).send({
       success: true,
+      data: {
+        jwt: jwtToken,
+        user: user,
+      },
       message: "Google authentication successful",
-      jwt: jwtToken,
-      user: user,
     });
   } catch (error) {
     console.error("Error verifying Google ID token:", error);
