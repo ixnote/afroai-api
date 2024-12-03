@@ -23,8 +23,9 @@ const getSubscriptions = asyncHandler(async (req, res, next) => {
 });
 
 const webhook = asyncHandler(async (req, res, next) => {
-  await SubStore.webhook(req, res, next);
+  await SubStore.getWebhook(req, res, next);
 });
+
 module.exports = {
   getPlans,
   getSubscriptions,

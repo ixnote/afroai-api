@@ -31,6 +31,9 @@ module.exports = (sequelize, DataTypes) => {
       created_at: {
         type: Date,
       },
+      updated_at: {
+        type: Date,
+      },
       tokens_allocated: {
         type: DataTypes.INTEGER,
       },

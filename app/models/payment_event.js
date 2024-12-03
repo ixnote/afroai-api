@@ -39,9 +39,9 @@ module.exports = (sequelize, DataTypes) => {
       status: {
         type: DataTypes.STRING,
       },
-      payment_status: {
-        type: DataTypes.STRING,
-      },
+      // payment_status: {
+      //   type: DataTypes.STRING,
+      // },
       customer_email: {
         type: DataTypes.STRING,
       },

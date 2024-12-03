@@ -10,6 +10,7 @@ router
   .get("/plans", subCtrl.getPlans)
   .get("/", [authJwt.verifyToken], subCtrl.getSubscriptions)
   .post("/webhook", subCtrl.webhook)
+  // .get("/webhook", subCtrl.webhook)
   .post("/pay", [authJwt.verifyToken], subCtrl.makePayment);
 
 module.exports = router;

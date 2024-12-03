@@ -3,7 +3,7 @@ const Op = db.Sequelize.Op;
 const ErrorResponse = require("../utils/errorResponse");
 const asyncHandler = require("../middleware/async");
 const { paginate, pageCount } = require("../utils/helpers");
-const { initiatePayment } = require("./transaction.store");
+const { initiatePayment, webhook } = require("./transaction.store");
 
 const getPlans = asyncHandler(async (req, res, next) => {
   const plans = await db.SubscriptionPlan.findAll({
@@ -70,8 +70,17 @@ const getSubscriptions = asyncHandler(async (req, res, next) => {
   });
 });
 
+const getWebhook = asyncHandler(async (req, res, next) => {
+  return (response = await webhook(req, res, next));
+  // console.log("🚀 ~ getWebhook ~ response:", response);
+  // return res.status(200).send({
+  //   success: true,
+  // });
+});
+
 module.exports = {
   getPlans,
   getSubscriptions,
   makePayment,
+  getWebhook,
 };

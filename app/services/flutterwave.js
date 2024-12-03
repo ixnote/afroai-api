@@ -23,7 +23,7 @@ const verifyTransaction = asyncHandler(async (id) => {
     `${baseUrl}/transactions/${id}/verify`,
     options
   );
-  console.log("verify ", response.data);
+  console.log("🚀 ~ verifyTransaction ~ response:", response.data);
   return response.data;
 });
 
