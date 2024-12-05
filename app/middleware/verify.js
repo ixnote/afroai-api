@@ -4,7 +4,7 @@ const Login = db.Login;
 
 const checkDuplicateEmail = asyncHandler(async (req, res, next) => {
   // Email
-  db.User.findOne({
+  db.Users.findOne({
     where: {
       email: req.body.email,
     },
@@ -28,7 +28,7 @@ const checkDuplicatePhone = asyncHandler(async (req, res, next) => {
       const { phone } = req.body;
       const phoneNo = "+234" + phone.slice(1);
       //const table = type.charAt(0).toUpperCase() + type.slice(1);
-      const user = await db.User.findOne({
+      const user = await db.Users.findOne({
         where: {
           phone: phoneNo,
         },
@@ -49,7 +49,7 @@ const checkDuplicatePhone = asyncHandler(async (req, res, next) => {
 
 const checkDuplicateUsername = asyncHandler(async (req, res, next) => {
   // Email
-  db.User.findOne({
+  db.Users.findOne({
     where: {
       username: req.body.username,
     },

@@ -57,7 +57,7 @@ const createUser = asyncHandler(async (req, res, next) => {
   //   return res.status(400).send({ success: false, message: "Invalid role" });
   // }
 
-  const user = await db.User.create(data);
+  const user = await db.Users.create(data);
   await db.Wallet.create({
     holder_id: user.id,
     email: user.email,
@@ -80,7 +80,7 @@ const createUser = asyncHandler(async (req, res, next) => {
 
 const getUser = asyncHandler(async (req, res, next) => {
   const id = req.params.id ? req.params.id : req.user.id;
-  const user = await db.User.findOne({
+  const user = await db.Users.findOne({
     where: { id },
   });
 
@@ -113,7 +113,7 @@ const getUsers = asyncHandler(async (req, res, next) => {
   console.log("🚀 ~ getUsers ~ query:", query);
   // console.log(db);
 
-  const users = await db.User.findAndCountAll({
+  const users = await db.Users.findAndCountAll({
     where: query,
     ...paginate({ page, pageSize }),
     attributes: ["email", "password"],
@@ -138,7 +138,7 @@ const getUsers = asyncHandler(async (req, res, next) => {
 
 const suspendUser = asyncHandler(async (req, res, next) => {
   const { userId } = req.params;
-  const user = await db.User.findByPk(userId);
+  const user = await db.Users.findByPk(userId);
   if (!user) return next(new ErrorResponse("User was not found", 404));
   await user.update({
     suspended: true,
@@ -151,7 +151,7 @@ const suspendUser = asyncHandler(async (req, res, next) => {
 
 const reinstateUser = asyncHandler(async (req, res, next) => {
   const { userId } = req.params;
-  const user = await db.User.findByPk(userId);
+  const user = await db.Users.findByPk(userId);
   if (!user) return next(new ErrorResponse("User was not found", 404));
   await user.update({
     suspended: false,

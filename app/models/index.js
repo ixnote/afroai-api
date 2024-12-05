@@ -26,6 +26,7 @@ const sequelize = new Sequelize(
     define: {
       underscored: true,
     },
+    freezeTableName: true,
   }
 );
 

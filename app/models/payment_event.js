@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class PaymentEvent extends Model {
+  class PaymentEvents extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of DataTypes lifecycle.
@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
 
     static get defaultScope() {}
   }
-  PaymentEvent.init(
+  PaymentEvents.init(
     {
       id: {
         allowNull: false,
@@ -66,8 +66,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "PaymentEvent",
+      modelName: "PaymentEvents",
     }
   );
-  return PaymentEvent;
+  return PaymentEvents;
 };

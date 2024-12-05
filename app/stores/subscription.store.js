@@ -6,7 +6,7 @@ const { paginate, pageCount } = require("../utils/helpers");
 const { initiatePayment, webhook } = require("./transaction.store");
 
 const getPlans = asyncHandler(async (req, res, next) => {
-  const plans = await db.SubscriptionPlan.findAll({
+  const plans = await db.SubscriptionPlans.findAll({
     attributes: { exclude: ["updatedAt"] },
   });
   if (!plans.length) {
@@ -22,7 +22,7 @@ const getPlans = asyncHandler(async (req, res, next) => {
 const makePayment = asyncHandler(async (req, res, next) => {
   console.log("🚀 ~ makePayment ~ req:", req.user);
   const { plan_id } = req.body;
-  const plan = await db.SubscriptionPlan.findOne({
+  const plan = await db.SubscriptionPlans.findOne({
     where: { id: plan_id },
     attributes: { exclude: ["updatedAt"] },
   });

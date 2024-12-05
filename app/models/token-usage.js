@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
       },
       overflow_tokens: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
       },
       subscription_plan: {
         type: DataTypes.STRING,
@@ -47,6 +47,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "TokenUsage",
+      tableName: "token_usage",
     }
   );
   return TokenUsage;

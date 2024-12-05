@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class SubscriptionPlan extends Model {
+  class SubscriptionPlans extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of DataTypes lifecycle.
@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
 
     static get defaultScope() {}
   }
-  SubscriptionPlan.init(
+  SubscriptionPlans.init(
     {
       id: {
         allowNull: false,
@@ -31,17 +31,17 @@ module.exports = (sequelize, DataTypes) => {
       created_at: {
         type: Date,
       },
-      updated_at: {
-        type: Date,
-      },
+      // updated_at: {
+      //   type: Date,
+      // },
       tokens_allocated: {
         type: DataTypes.INTEGER,
       },
     },
     {
       sequelize,
-      modelName: "SubscriptionPlan",
+      modelName: "SubscriptionPlans",
     }
   );
-  return SubscriptionPlan;
+  return SubscriptionPlans;
 };

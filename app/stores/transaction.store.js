@@ -38,7 +38,7 @@ const initiatePayment = asyncHandler(async (body) => {
     },
   };
 
-  await db.PaymentEvent.create({
+  await db.PaymentEvents.create({
     tx_ref: ref,
     email: user.email,
     customer_name: "",
@@ -59,17 +59,17 @@ const initiatePayment = asyncHandler(async (body) => {
 const confirmation = asyncHandler(async (req, res, next) => {
   const { tx_ref, tx_id, transaction_id, txRef } = req.query;
   const trans_ref = tx_ref ?? txRef;
-  const transaction = await db.PaymentEvent.findOne({
+  const transaction = await db.PaymentEvents.findOne({
     // where: { tx_ref: trans_ref, status: "initiated" },
     where: { tx_ref: trans_ref, status: "pending" },
   });
-  console.log("🚀 ~ confirmation ~ transaction:", transaction.PaymentEvent);
 
   if (!transaction) {
     return next(new ErrorResponse("Invalid or completed Transaction", 403));
   } else {
     const tx = tx_id ?? transaction_id;
     const verify = await verifyTransaction(tx);
+    // console.log("🚀 ~ confirmation ~ verify:", verify.data);
     if (verify.status === "success") {
       if (
         verify.data.status === "successful" &&
@@ -86,27 +86,60 @@ const confirmation = asyncHandler(async (req, res, next) => {
           customer_name: verify?.data?.customer?.name,
         });
 
-        const subscriptionPlan = await db.SubscriptionPlan.findOne({
-          where: { id: transaction.plan_id },
+        const subscriptionPlan = await db.SubscriptionPlans.findOne({
+          where: { id: transaction?.plan_id },
+          attributes: { exclude: ["updatedAt"] },
         });
 
-        console.log("🚀 ~ confirmation ~ subscriptionPlan:", subscriptionPlan);
+        if (!subscriptionPlan) {
+          return next(new ErrorResponse("Subscripion plan not found. ", 403));
+        }
 
-        const user = await db.User.findOne({
-          // where: { email: transaction.email },
+        const user = await db.Users.findOne({
           where: { email: verify.data?.customer?.email },
         });
 
         console.log("🚀 ~ confirmation ~ user:", user);
 
-        const newToken = user.token + subscriptionPlan.tokens_allocated;
+        if (!user) {
+          return next(new ErrorResponse("User not found. ", 403));
+        }
 
-        user.update({
-          token: newToken,
+        console.log("🚀 ~ confirmation ~ subscriptionPlan:", subscriptionPlan);
+
+        await db.SubscriptionHistory.create({
+          user_id: user?.id,
+          tokens_allocated: subscriptionPlan.tokens_allocated,
+          payment_reference: verify.data.flw_ref,
+          transaction_id: verify.data.id,
+          plan_name: subscriptionPlan.plan_name,
         });
 
+        let tokenUsage = await db.TokenUsage.findOne({
+          where: { user_id: user?.id },
+        });
+
+        console.log("🚀 ~ confirmation ~ tokenUsage:", tokenUsage);
+
+        if (!tokenUsage) {
+          tokenUsage = await db.TokenUsage.create({
+            user_id: user?.id,
+            model_id: 1,
+            remaining_tokens: subscriptionPlan.tokens_allocated,
+            subscription_plan: subscriptionPlan.plan_name,
+            overflow_tokens: 0,
+          });
+          console.log("🚀 ~ confirmation ~ tokenUsage NEW : ", tokenUsage);
+        } else {
+          tokenUsage.remaining_tokens += Number(
+            subscriptionPlan.tokens_allocated
+          );
+
+          await tokenUsage.save();
+        }
+
         return {
-          user,
+          tokenUsage,
           transaction,
         };
 

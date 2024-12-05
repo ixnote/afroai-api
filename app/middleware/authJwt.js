@@ -22,7 +22,7 @@ const verifyToken = asyncHandler(async (req, res, next) => {
       }
       //store decoded token in request
 
-      user = await db.User.findOne({
+      user = await db.Users.findOne({
         where: { id: decoded.id },
       });
       req.user = user;

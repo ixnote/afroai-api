@@ -23,6 +23,7 @@ const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 const googleAuth = asyncHandler(async (req, res, next) => {
   const { id_token } = req.body;
+  console.log("🚀 ~ googleAuth ~ id_token:", id_token);
 
   if (!id_token) {
     return res.status(400).json({ message: "id_token is required" });
@@ -41,14 +42,14 @@ const googleAuth = asyncHandler(async (req, res, next) => {
     const { email, name } = payload;
 
     // Check if the user already exists in the database
-    let user = await db.User.findOne({
+    let user = await db.Users.findOne({
       where: { email },
       raw: true,
     });
 
     if (!user) {
       // If user does not exist, create a new one
-      user = await db.User.create(
+      user = await db.Users.create(
         {
           email,
           // username: name,

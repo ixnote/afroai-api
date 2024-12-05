@@ -1,4 +1,5 @@
 "use strict";
+const { STRING } = require("sequelize");
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class SubscriptionHistory extends Model {
@@ -31,6 +32,9 @@ module.exports = (sequelize, DataTypes) => {
       transaction_id: {
         type: DataTypes.INTEGER,
       },
+      plan_name: {
+        type: STRING,
+      },
       created_at: {
         type: Date,
       },
@@ -41,6 +45,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "SubscriptionHistory",
+      tableName: "subscription_history",
     }
   );
   return SubscriptionHistory;
