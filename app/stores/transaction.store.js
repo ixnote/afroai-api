@@ -119,24 +119,32 @@ const confirmation = asyncHandler(async (req, res, next) => {
           where: { user_id: user?.id },
         });
 
-        console.log("🚀 ~ confirmation ~ tokenUsage:", tokenUsage);
+        console.log("🚀 ~ confirmation ~ tokenUsage 1: ", tokenUsage);
+
+        const overflowTokens = 20000;
 
         if (!tokenUsage) {
           tokenUsage = await db.TokenUsage.create({
             user_id: user?.id,
             model_id: 1,
-            remaining_tokens: subscriptionPlan.tokens_allocated,
+            remaining_tokens: parseInt(
+              subscriptionPlan.tokens_allocated - overflowTokens
+            ),
             subscription_plan: subscriptionPlan.plan_name,
-            overflow_tokens: 0,
+            overflow_tokens: overflowTokens,
           });
           console.log("🚀 ~ confirmation ~ tokenUsage NEW : ", tokenUsage);
         } else {
           tokenUsage.remaining_tokens += Number(
-            subscriptionPlan.tokens_allocated
+            subscriptionPlan.tokens_allocated - overflowTokens
           );
+          tokenUsage.overflow_tokens =
+            tokenUsage.overflow_tokens + parseInt(overflowTokens);
 
           await tokenUsage.save();
         }
+
+        console.log("🚀 ~ confirmation ~ tokenUsage 2: ", tokenUsage);
 
         return {
           tokenUsage,

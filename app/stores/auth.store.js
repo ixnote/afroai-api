@@ -75,6 +75,9 @@ const googleAuth = asyncHandler(async (req, res, next) => {
     );
 
     delete user.password;
+    const tokenUsage = await db.TokenUsage.findOne({
+      where: { user_id: user.id },
+    });
 
     // Return the JWT
     // res.json({
@@ -88,7 +91,12 @@ const googleAuth = asyncHandler(async (req, res, next) => {
       success: true,
       data: {
         jwt: jwtToken,
-        user: user,
+        user: {
+          ...user,
+          availableToken: tokenUsage ? tokenUsage.remaining_tokens : 0,
+        },
+        // user: user,
+        // token: tokenUsage ? tokenUsage.remaining_tokens : 0,
       },
       message: "Google authentication successful",
     });

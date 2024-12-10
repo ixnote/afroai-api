@@ -88,10 +88,14 @@ const getUser = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse("User with ID not found", 404));
   }
 
+  const tokenUsage = await db.TokenUsage.findOne({
+    where: { user_id: user.id },
+  });
+
   res.status(200).send({
     success: true,
     message: "User found",
-    data: user,
+    data: { user, token: tokenUsage ? tokenUsage.remaining_tokens : 0 },
   });
 });
 
