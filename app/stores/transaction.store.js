@@ -146,10 +146,19 @@ const confirmation = asyncHandler(async (req, res, next) => {
 
         console.log("🚀 ~ confirmation ~ tokenUsage 2: ", tokenUsage);
 
-        return {
-          tokenUsage,
-          transaction,
-        };
+        // return {
+        //   tokenUsage,
+        //   transaction,
+        // };
+
+        return res.status(200).send({
+          success: true,
+          // data: {
+          //   tokenUsage,
+          //   transaction,
+          // },
+          message: "Transaction successful",
+        });
 
         // let directory = JSON.stringify(__dirname);
         // const directoryArray = directory.split("/");
