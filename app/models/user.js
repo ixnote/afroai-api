@@ -34,6 +34,12 @@ module.exports = (sequelize, DataTypes) => {
       token: {
         type: DataTypes.STRING,
       },
+      name: {
+        type: DataTypes.STRING,
+      },
+      avatar: {
+        type: DataTypes.STRING,
+      },
       created_at: {
         type: Date,
       },

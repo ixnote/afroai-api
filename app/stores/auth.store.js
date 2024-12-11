@@ -39,7 +39,7 @@ const googleAuth = asyncHandler(async (req, res, next) => {
     const payload = ticket.getPayload();
     console.log("🚀 ~ googleAuth ~ payload:", payload);
 
-    const { email, name } = payload;
+    const { email, name, picture } = payload;
 
     // Check if the user already exists in the database
     let user = await db.Users.findOne({
@@ -52,12 +52,24 @@ const googleAuth = asyncHandler(async (req, res, next) => {
       user = await db.Users.create(
         {
           email,
-          // username: name,
+          name: name,
           password: id_token, // Save the id_token as the password without hashing
-          // profile_picture: picture,
+          avatar: picture,
           isConfirmed: true, // Set confirmed status (adjust based on your logic)
         },
         { raw: true }
+      );
+    } else {
+      await db.Users.update(
+        {
+          name: name,
+          avatar: picture,
+        },
+        {
+          where: {
+            id: user?.id,
+          },
+        }
       );
     }
 
