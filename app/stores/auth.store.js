@@ -74,26 +74,28 @@ const googleAuth = asyncHandler(async (req, res, next) => {
     }
 
     // Generate a JWT token
-    const jwtToken = (userId) => {
-      const payload = {
-        user_id: userId,
-        exp: Math.floor(Date.now() / 1000) + 60 * 30,
-      }; // Expires in 30 minutes
-      return jwt.sign(payload, JWT_SECRET);
-    };
+    // const jwtToken = (userId) => {
+    //   const payload = {
+    //     user_id: userId,
+    //     exp: Math.floor(Date.now() / 1000) + 60 * 30,
+    //   }; // Expires in 30 minutes
+    //   return jwt.sign(payload, JWT_SECRET);
+    // };
 
     // Create a JWT
-    // const jwtToken = jwt.sign(
-    //   {
-    //     id: user.id,
-    //     email: user.email,
-    //     password: id_token,
-    //     // username: user.username,
-    //     // picture: user.profile_picture,
-    //   },
-    //   config.secret,
-    //   { expiresIn: "1h" }
-    // );
+    const jwtToken = jwt.sign(
+      {
+        id: user.id,
+        email: user.email,
+        password: id_token,
+        // username: user.username,
+        // picture: user.profile_picture,
+      },
+      config.secret,
+      // { expiresIn: "1h" }
+      { expiresIn: "30m" }
+    );
+
 
     delete user.password;
     const tokenUsage = await db.TokenUsage.findOne({

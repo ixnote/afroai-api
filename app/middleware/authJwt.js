@@ -7,6 +7,7 @@ const db = require("../models/index.js");
 const verifyToken = asyncHandler(async (req, res, next) => {
   //Get token from headers
   let token = req.headers["x-access-token"];
+  console.log("🚀 ~ verifyToken ~ token:", token)
 
   if (!token) {
     return next(new ErrorResponse("No token provided", 401));
@@ -30,7 +31,6 @@ const verifyToken = asyncHandler(async (req, res, next) => {
     })
   );
 });
-
 const authorize = (...roles) => {
   return (req, res, next) => {
     //console.log(req.user)
