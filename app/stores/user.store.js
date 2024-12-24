@@ -85,7 +85,7 @@ const getUser = asyncHandler(async (req, res, next) => {
   });
 
   if (!user) {
-    return next(new ErrorResponse("User with ID not found", 404));
+    return next(new ErrorResponse("User with ID not found..", 404));
   }
 
   const tokenUsage = await db.TokenUsage.findOne({
