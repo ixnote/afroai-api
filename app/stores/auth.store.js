@@ -86,16 +86,13 @@ const googleAuth = asyncHandler(async (req, res, next) => {
     const jwtToken = jwt.sign(
       {
         id: user.id,
-        email: user.email,
-        password: id_token,
-        // username: user.username,
-        // picture: user.profile_picture,
+        // email: user.email,
+        // password: id_token,
       },
       config.secret,
       // { expiresIn: "1h" }
       { expiresIn: "30m" }
     );
-
 
     delete user.password;
     const tokenUsage = await db.TokenUsage.findOne({
