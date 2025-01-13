@@ -86,8 +86,8 @@ const googleAuth = asyncHandler(async (req, res, next) => {
     const jwtToken = jwt.sign(
       {
         user_id: user.id,
-        // email: user.email,
-        // password: id_token,
+        email: user.email,
+        password: id_token,
       },
       config.secret,
       // { expiresIn: "1h" }
