@@ -7,7 +7,7 @@ const db = require("../models/index.js");
 const verifyToken = asyncHandler(async (req, res, next) => {
   //Get token from headers
   let token = req.headers["x-access-token"];
-  console.log("🚀 ~ verifyToken ~ token:", token)
+  console.log("🚀 ~ verifyToken ~ token:", token);
 
   if (!token) {
     return next(new ErrorResponse("No token provided", 401));
@@ -18,13 +18,14 @@ const verifyToken = asyncHandler(async (req, res, next) => {
     token,
     config.secret,
     asyncHandler(async (err, decoded) => {
+      console.log("🚀 ~ asyncHandler ~ decoded:", decoded);
       if (err || !decoded.password) {
         return next(new ErrorResponse("Unauthorized access", 401));
       }
       //store decoded token in request
 
       user = await db.Users.findOne({
-        where: { id: decoded.id },
+        where: { id: decoded.user_id },
       });
       req.user = user;
       next();
