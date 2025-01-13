@@ -78,8 +78,8 @@ const googleAuth = asyncHandler(async (req, res, next) => {
     //   const payload = {
     //     user_id: userId,
     //     exp: Math.floor(Date.now() / 1000) + 60 * 30,
-    //   }; // Expires in 30 minutes
-    //   return jwt.sign(payload, JWT_SECRET);
+    //   }; // Expires in 30 minutes.
+    //   return jwt.sign(payload, JWT_SECRET);ss
     // };
 
     // Create a JWT
