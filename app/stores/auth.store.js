@@ -44,7 +44,7 @@ const googleAuth = asyncHandler(async (req, res, next) => {
     // Check if the user already exists in the database
     let user = await db.Users.findOne({
       where: { email },
-      raw: true,
+      // raw: true,
     });
 
     if (!user) {
@@ -56,8 +56,8 @@ const googleAuth = asyncHandler(async (req, res, next) => {
           password: id_token, // Save the id_token as the password without hashing
           avatar: picture,
           isConfirmed: true, // Set confirmed status (adjust based on your logic)
-        },
-        { raw: true }
+        }
+        // { raw: true }
       );
     } else {
       await db.Users.update(
@@ -107,14 +107,13 @@ const googleAuth = asyncHandler(async (req, res, next) => {
     //   user: user,
     // });
 
+    user.availableToken = tokenUsage ? tokenUsage.remaining_tokens : 0;
+
     return res.status(200).send({
       success: true,
       data: {
         jwt: jwtToken,
-        user: {
-          ...user,
-          availableToken: tokenUsage ? tokenUsage.remaining_tokens : 0,
-        },
+        user,
         // user: user,
         // token: tokenUsage ? tokenUsage.remaining_tokens : 0,
       },
