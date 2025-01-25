@@ -71,7 +71,7 @@ const getSubscriptions = asyncHandler(async (req, res, next) => {
 });
 
 const getWebhook = asyncHandler(async (req, res, next) => {
-  return (response = await webhook(req, res, next));
+  return await webhook(req, res, next);
   // console.log("🚀 ~ getWebhook ~ response:", response);
   // return res.status(200).send({
   //   success: true,
