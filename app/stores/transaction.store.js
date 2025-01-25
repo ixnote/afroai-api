@@ -56,6 +56,27 @@ const initiatePayment = asyncHandler(async (body) => {
   return await initiateTransaction(payload);
 });
 
+const confirm = asyncHandler(async (req, res, next) => {
+  const check = async () => {
+    const { tx_ref, txRef } = req.query;
+    const trans_ref = tx_ref ?? txRef;
+    const transaction = await db.PaymentEvents.findOne({
+      where: { tx_ref: trans_ref },
+    });
+
+    if (!transaction)
+      return next(new ErrorResponse("Invalid or completed Transaction", 403));
+
+    if (transaction.status == "pending" || transaction.status == "initiated")
+      await check();
+  };
+  await check();
+  return res.status(200).send({
+    success: true,
+    message: "Transaction successful",
+  });
+});
+
 const confirmation = asyncHandler(async (req, res, next) => {
   const { tx_ref, tx_id, transaction_id, txRef } = req.query;
   const trans_ref = tx_ref ?? txRef;
@@ -203,6 +224,7 @@ const webhook = asyncHandler(async (req, res, next) => {
 });
 
 module.exports = {
+  confirm,
   initiatePayment,
   confirmation,
   webhook,
