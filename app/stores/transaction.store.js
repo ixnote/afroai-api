@@ -57,8 +57,13 @@ const initiatePayment = asyncHandler(async (body) => {
 });
 
 const confirm = asyncHandler(async (req, res, next) => {
-  const check = async () => {
-    const { tx_ref, tx_id, transaction_id, txRef } = req.body;
+  const check = async (attempts = 0, maxAttempts = 5) => {
+    if (attempts >= maxAttempts) {
+      return next(new ErrorResponse("Transaction verification timeout", 408));
+    }
+
+    const { tx_ref, tx_id, transaction_id, txRef } =
+      req.body.transactionDetails;
     const trans_ref = tx_ref ?? txRef;
     const transaction = await db.PaymentEvents.findOne({
       where: { tx_ref: trans_ref },
@@ -67,9 +72,13 @@ const confirm = asyncHandler(async (req, res, next) => {
     if (!transaction)
       return next(new ErrorResponse("Invalid or completed Transaction", 403));
 
-    if (transaction.status == "pending" || transaction.status == "initiated")
-      await check();
+    if (transaction.status == "pending" || transaction.status == "initiated") {
+      // Wait for 2 seconds before next attempt
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      return await check(attempts + 1, maxAttempts);
+    }
   };
+
   await check();
   return res.status(200).send({
     success: true,
