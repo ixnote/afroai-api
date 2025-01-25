@@ -8,8 +8,8 @@ const authJwt = require("../middleware/authJwt");
 
 router
   .get("/plans", subCtrl.getPlans)
-  .get("/confirm", subCtrl.confirm)
   .get("/", [authJwt.verifyToken], subCtrl.getSubscriptions)
+  .post("/confirm", subCtrl.confirm)
   .post("/webhook", subCtrl.webhook)
   // .get("/webhook", subCtrl.webhook)
   .post("/pay", [authJwt.verifyToken], subCtrl.makePayment);

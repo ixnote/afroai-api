@@ -58,7 +58,7 @@ const initiatePayment = asyncHandler(async (body) => {
 
 const confirm = asyncHandler(async (req, res, next) => {
   const check = async () => {
-    const { tx_ref, txRef } = req.query;
+    const { tx_ref, tx_id, transaction_id, txRef } = req.body;
     const trans_ref = tx_ref ?? txRef;
     const transaction = await db.PaymentEvents.findOne({
       where: { tx_ref: trans_ref },
