@@ -187,7 +187,7 @@ const webhook = asyncHandler(async (req, res, next) => {
       res.status(401).end();
     }
 
-    console.log("🚀 ~ webhook ~ payload:", payload);
+    console.log("🚀 ~ webhook ~ payload:", req.body);
     const payload = req.body.transactionDetails;
     req.query = { tx_ref: payload.tx_ref, tx_id: payload.transaction_id };
     await confirmation(req, res, next);
